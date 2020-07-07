@@ -6,9 +6,11 @@
 #define NWORDS_TEXT 1000
 #define DICTIONARY_LEN 320139
 
-char **getTextFromFile(char[]);
-
 char **getDictionary(char[]);
+
+char **getTextFromFile(char[], int*);
+
+char **getWordsFromLine(char[], int*);
 
 void freeArray (char **words, int rows);
 
@@ -18,18 +20,34 @@ int compare_words(char[], char[]);
 
 int main(int argc, char argv[]){
     char **dictionary = getDictionary("palavras.txt");
+    char **userText = NULL;
+    int numberOfWords = 0;
 
     printf("Olá, seja bem vindo ao spell-checker!\n");
     printf("Digite o nome do arquivo que deverá ser corrigido\n");
-    printf("Ou digite 'T' para digitar o texto no terminal.\n");
+    printf("Ou digite 'T' e ENTER para digitar o texto no terminal.\n");
     printf("> ");
 
-    char text[280];
-    fgets(text, 280, stdin);
+    char input[280];
+    fgets(input, 280, stdin);
 
+    if (strlen(input) == 2 && input[0] == 'T') {
+        printf("> ");
+        fgets(input, 280, stdin);
 
-    printf("%s\n", dictionary[0]);
-    printf("%s\n", dictionary[DICTIONARY_LEN - 1]);
+        userText = getWordsFromLine(input, &numberOfWords);
+
+        printf("%d\n", numberOfWords);
+        printf("%s\n", userText[numberOfWords - 1]);
+        // Fazer nossas operações...
+    } else {
+        input[strlen(input) - 1] = '\0';
+        userText = getTextFromFile(input, &numberOfWords);
+
+        printf("%d\n", numberOfWords);
+        printf("%s\n", userText[numberOfWords - 1]);
+        // Fazer nossas operações...
+    }
 
     //printf("O texto foi: \n%s", text);
 
@@ -83,56 +101,9 @@ int main(int argc, char argv[]){
     // }
 
     freeArray(dictionary, DICTIONARY_LEN);
+    freeArray(userText, numberOfWords);
 
     return 0;
-}
-
-char **getTextFromFile(char filename[]) {
-    FILE *file;
-    file = fopen(filename, "r");
-
-    if (!file) return NULL;
-
-    char line[281];
-    char *result;
-    char **text = NULL;
-
-    if (!(text = calloc(NWORDS_TEXT, sizeof *text))) {
-        printf("Memória Virtual exaurida!\n");
-        return NULL;
-    }
-
-    int i = 0;
-    while (!feof(file))
-    {
-        result = fgets(line, 282, file);
-        
-        size_t linelen = strlen(result);
-
-        if (result[linelen - 1] == '\n') {
-            result[linelen - 1] = 0;
-        }
-
-        int wordlen = 47;
-        char word[wordlen];
-        for (int j = 0; j < linelen; j++) {
-            if (result[j] == ' ') {
-                text[i++] = strdup(word);
-                memset(word, 0, wordlen);
-            } else {
-                strcat(word, result[j]);
-            }
-        }
-
-        if (strlen(word) > 0) {
-            text[i++] = strdup(word);
-            memset(word, 0, wordlen);
-        }
-    }
-
-    fclose(file);
-
-    return text;
 }
 
 // Função para obter o dicionário em array
@@ -142,7 +113,7 @@ char **getDictionary(char filename[]) {
 
     // Caso o arquivo não exista
     if (!file) {
-        printf("ERRO! O arquivo não foi aberto!\n");
+        printf("ERRO! O arquivo %s não foi aberto!\n", filename);
         return NULL;
     }
 
@@ -179,6 +150,83 @@ char **getDictionary(char filename[]) {
 
     return dictionary;
 }
+
+
+char **getTextFromFile(char filename[], int *numberOfWords) {
+    FILE *file;
+    file = fopen(filename, "r");
+
+    if (file == NULL) {
+        printf("ERRO! O arquivo %s não foi aberto!\n", filename);
+        return NULL;
+    }
+
+    char line[281];
+    char *result;
+    char **text = NULL;
+
+    if (!(text = calloc(NWORDS_TEXT, sizeof *text))) {
+        printf("Memória Virtual exaurida!\n");
+        return NULL;
+    }
+
+    char **words = NULL;
+    int i = 0;
+    while (!feof(file)) {
+        result = fgets(line, 282, file);
+        
+        int nWordsOfLine = 0;
+        words = getWordsFromLine(result, &nWordsOfLine);
+        (*numberOfWords) += nWordsOfLine;
+
+        for (int j = 0; j < nWordsOfLine; j++) {
+            text[i++] = words[j];
+        }
+    }
+
+    fclose(file);
+
+    return text;
+}
+
+char **getWordsFromLine(char line[], int *numberOfWords) {
+    char **words = NULL;
+
+    if (!(words = calloc(NWORDS_TEXT, sizeof *words))) {
+        printf("Memória Virtual exaurida!\n");
+        return NULL;
+    }
+    
+    size_t linelen = strlen(line);
+
+    if (line[linelen - 1] == '\n') {
+        line[linelen - 1] = 0;
+    }
+
+    int i = 0;
+    int wordlen = 47;
+    char word[wordlen];
+    int currentChar = 0;
+
+    for (int j = 0; j < linelen; j++) {
+        if (line[j] == ' ') {
+            words[i++] = strdup(word);
+            (*numberOfWords)++;
+            memset(word, 0, wordlen);
+            currentChar = 0;
+        } else {
+            word[currentChar++] = line[j];
+        }
+    }
+
+    if (strlen(word) > 0) {
+        words[i++] = strdup(word);
+        (*numberOfWords)++;
+        memset(word, 0, wordlen);
+    }
+
+    return words;
+} 
 
 // Função para liberar espaço dos arrays alocados dinâmicamente
 void freeArray (char **words, int rows){
