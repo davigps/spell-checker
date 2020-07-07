@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define NWORDS_TEXT 141
-#define DICTIONARY_LEN 320139
+#define DICTIONARY_LEN 320140
 #define MAX_INPUT 281
 
 char **getDictionary(char[]);
@@ -249,12 +249,7 @@ int compare_words(char palavra[46], char result[46]){
     int i = 0;
 
     for( i = 0; i < 46; i++){
-        if(palavra[i] != result[i]){
-            if(isalpha(palavra[i]) == 0 && isalpha(result[i]) == 0){
-                break;
-            }
-            return 0;
-        }
+        if(palavra[i] != result[i]) return 0;
     }
     return 1;
 }
