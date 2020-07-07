@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define NWORDS_TEXT 1000
+#define NWORDS_TEXT 141
 #define DICTIONARY_LEN 320139
 #define MAX_INPUT 281
 
@@ -13,9 +13,11 @@ char **getTextFromFile(char[], int*);
 
 char **getWordsFromLine(char[], int*);
 
-void freeArray (char **words, int rows);
+void freeArray (char **, int);
 
-int check_word(char []);
+char **check_words(char **, int, char **);
+
+int find_word(char [], char**);
 
 int compare_words(char[], char[]);
 
@@ -42,60 +44,9 @@ int main(int argc, char argv[]){
         userText = getTextFromFile(input, &numberOfWords);
     }
 
-    printf("%d\n", numberOfWords);
-    printf("%s\n", userText[numberOfWords - 1]);
-    // Fazer nossas operações...
+    char **wrongWords = check_words(userText, numberOfWords, dictionary);
 
-    //printf("O texto foi: \n%s", text);
-
-    // int c = 0;
-    // while(text[c] != '\0'){
-    //     printf("%s", text[c]);
-    //     c++;
-    // }*/
-
-    
-    
-
-    //verificação por palavra
-    // char palavra[141][46];
-    // int c, l= 0, j=0;
-    // for (c = 0; c < 280; c++, j++){
-    //     if(text[c] == '\0'){
-    //         break;
-    //     }
-    //     if(text[c] == ' ' || text[c] == '\n' ){
-    //         printf("%s\n", palavra[l]);
-    //         //verificação se a palavra formada esta no arquivo .txt
-    //         j = -1;
-    //         l = l + 1;
-    //     }
-    //     else{
-    //         palavra[l][j] = text[c];
-    //     }
-    // }
-
-    // char palavra[46];
-    // int c, i= 0;
-    // for (c = 0; c < 280; c++, i++){
-    //     if(text[c] == '\0'){
-    //         break;
-    //     }
-    //     if(text[c] == ' ' || text[c] == '\n' ){
-    //         //verificação se a palavra formada esta no arquivo .txt
-    //         int j;
-    //         // if (check_word(palavra) == 0){
-    //             //Quando nao achar a palavra faz ...
-    //         // }  
-    //         for ( j = 0; j < i; j++ ){
-    //             palavra[j] = ' ';
-    //         }
-    //         i = -1;
-    //     }
-    //     else{
-    //         palavra[i] = text[c];
-    //     }
-    // }
+    printf("Palavra errada %s\n", wrongWords[0]);
 
     freeArray(dictionary, DICTIONARY_LEN);
     freeArray(userText, numberOfWords);
@@ -261,25 +212,36 @@ void freeArray (char **words, int rows){
     free(words);
 }
 
+char **check_words(char **userText, int numberOfWords, char **dictionary) {
+    // Inicializa o array de palavras
+    char **words = NULL;
 
-int check_word(char palavra[46]){
-    FILE *pont_arq;
-    pont_arq = fopen("palavras.txt", "r");
-    if (pont_arq == NULL){
-        printf("ERRO! O arquivo não foi aberto!\n");
+    // Aloca o tamanho máximo do array de palavras
+    if (!(words = calloc(NWORDS_TEXT, sizeof *words))) {
+        printf("Memória Virtual exaurida!\n");
+        return NULL;
     }
 
-    char Linha[46];
+    int currentWord = 0;
+    for (int i = 0; i < numberOfWords; i++) {
+        if (!find_word(userText[i], dictionary)) {
+            words[currentWord++] = userText[i];
+        }
+    }
+
+    return words;
+}
+
+int find_word(char *word, char **dictionary){
     char *result;
 
-    while (!feof(pont_arq)) {
-        result = fgets(Linha, 47, pont_arq);
-        if (compare_words(palavra, result) == 1){
-            printf("%s <<<< Achamos !", result);
+    for (int i = 0; i < DICTIONARY_LEN; i++) {
+        if (compare_words(word, dictionary[i])){
+            printf("%s <<<< Achamos !\n", dictionary[i]);
             return 1;
         }
     }
-    fclose(pont_arq);
+
     return 0;
 }
 
