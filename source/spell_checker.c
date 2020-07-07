@@ -19,7 +19,11 @@ char **check_words(char **, int, char **);
 
 int find_word(char [], char**);
 
+int binarySearch(char**, int, int, char *);
+
 int compare_words(char[], char[]);
+
+int cmpstr(char *a, char *b);
 
 int main(int argc, char argv[]){
     char **dictionary = getDictionary("palavras.txt");
@@ -46,7 +50,11 @@ int main(int argc, char argv[]){
 
     char **wrongWords = check_words(userText, numberOfWords, dictionary);
 
-    printf("Palavra errada %s\n", wrongWords[0]);
+    int i = -1;
+    while (wrongWords[++i]) {
+        // printf("A palavra Numca pode estar escrita incorretamente, as opções de substituição são:\n");
+        printf("Errada: %s\n", wrongWords[i]);
+    }
 
     freeArray(dictionary, DICTIONARY_LEN);
     freeArray(userText, numberOfWords);
@@ -224,12 +232,33 @@ char **check_words(char **userText, int numberOfWords, char **dictionary) {
 
     int currentWord = 0;
     for (int i = 0; i < numberOfWords; i++) {
-        if (!find_word(userText[i], dictionary)) {
+        int iResult = binarySearch(dictionary, 0, DICTIONARY_LEN - 1, userText[i]);
+
+        if (iResult == -1) {
+            printf("chegou %s\n", userText[i]);
             words[currentWord++] = userText[i];
         }
     }
 
+
     return words;
+}
+
+int binarySearch(char **array, int ini, int end, char *x) {
+    if (ini <= end) {
+        int mid = ini + (end - ini) / 2;
+
+        if (strcmp(array[mid], x) == 0) {
+            printf("achou %s\n", array[mid]);
+            return mid;
+        } else if (strcmp(array[mid], x) > 0) {
+            return binarySearch(array, ini, mid-1, x);
+        } else if (strcmp(array[mid], x) < 0) {
+            return binarySearch(array, mid+1, end, x);
+        }
+    }
+
+    return -1;
 }
 
 int find_word(char *word, char **dictionary){
@@ -243,18 +272,4 @@ int find_word(char *word, char **dictionary){
     }
 
     return 0;
-}
-
-int compare_words(char palavra[46], char result[46]){
-    int i = 0;
-
-    for( i = 0; i < 46; i++){
-        if(palavra[i] != result[i]){
-            if(isalpha(palavra[i]) == 0 && isalpha(result[i]) == 0){
-                break;
-            }
-            return 0;
-        }
-    }
-    return 1;
 }
