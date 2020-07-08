@@ -1,4 +1,31 @@
+<<<<<<< HEAD
 #include "spell_checker_func.h"
+=======
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define NWORDS_TEXT 141
+#define DICTIONARY_LEN 320139
+#define MAX_INPUT 281
+
+char **getDictionary(char[]);
+
+char **getTextFromFile(char[], int*);
+
+char **getWordsFromLine(char[], int*);
+
+void freeArray (char **, int);
+
+char **check_words(char **, int, char **);
+
+int find_word(char [], char**);
+
+int binarySearch(char**, int, int, char *);
+
+int compare_words(char[], char[]);
+>>>>>>> 762584d1c94fbb823ca7cc0e31e18b9d07701342
 
 int main(int argc, char argv[]){
     char **dictionary = getDictionary("palavras.txt");
