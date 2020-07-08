@@ -23,8 +23,6 @@ int binarySearch(char**, int, int, char *);
 
 int compare_words(char[], char[]);
 
-int cmpstr(char *a, char *b);
-
 int main(int argc, char argv[]){
     char **dictionary = getDictionary("palavras.txt");
     char **userText = NULL;
