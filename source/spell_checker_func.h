@@ -253,15 +253,20 @@ int find_word(char *word, char **dictionary)
 {
     char *result;
     int i;
+    int isAlreadyUpper = isupper(word[0]);
+    word[0] = tolower(word[0]);
+
     for (i = 0; i < DICTIONARY_LEN; i++)
     {
-        word[0] = tolower(word[0]);
         if (strcmp(word, dictionary[i]) == 0)
         {
+            if (isAlreadyUpper) word[0] = toupper(word[0]);
             return 1;
         }
+        
     }
 
+    if (isAlreadyUpper) word[0] = toupper(word[0]);
     return 0;
 }
 
@@ -273,20 +278,27 @@ void getSimilar(char word[], char **dictionary, char *similar) {
     char third[MAXSTRING];
     int thirdDistance = MAX_DISTANCE;
 
+    int isAlreadyUpper = isupper(word[0]);
 
     for (int i = 0; i < DICTIONARY_LEN; i++) {
-        int distance = levenshtein(dictionary[i], word);
+        int distance = levenshtein(dictionary[i], word); 
 
         if (distance < firstDistance) {
-            strncpy(first, dictionary[i], 47);
+            strcpy(first, dictionary[i]);
             firstDistance = distance;
         } else if (distance < secondDistance) {
-            strncpy(second, dictionary[i], 47);
+            strcpy(second, dictionary[i]);
             secondDistance = distance;
         } else if (distance < thirdDistance) {
-            strncpy(third, dictionary[i], 47);
+            strcpy(third, dictionary[i]);
             thirdDistance = distance;
         }
+    }
+
+    if (isAlreadyUpper) {
+        first[0] = toupper(first[0]);
+        second[0] = toupper(second[0]);
+        third[0] = toupper(third[0]);
     }
 
     printf("  1 - %s\n", first);
@@ -297,25 +309,29 @@ void getSimilar(char word[], char **dictionary, char *similar) {
     printf("> ");
     scanf("%d", &option);
 
-    if (option == 1) strncpy(similar, first, MAXSTRING);
-    else if (option == 2) strncpy(similar, second, MAXSTRING);
-    else if (option == 3) strncpy(similar, third, MAXSTRING);
+    if (option == 1) strcpy(similar, first);
+    else if (option == 2) strcpy(similar, second);
+    else if (option == 3) strcpy(similar, third);
     else if (option == 0) similar = NULL;
     else {
         printf("Opção desconhecida, nenhuma alteração será feita.\n");
     }
 
-    int isAlreadyUpper = isupper(word[0]);
     if (similar != NULL && isAlreadyUpper) similar[0] = toupper(similar[0]);
 }
 
 void changeWord(char wrongWord[], char similar[], char **userText, int numberOfWords) {
     for (int i = 0; i < numberOfWords; i++) {
-        printf("CONDICAO: %s %s\n", userText[i], similar);
+        // printf("CONDICAO: %s %s\n", userText[i], similar);
 
         if (strcmp(userText[i], wrongWord) == 0) {
-            printf("SIMILAR: %s\n", similar);
-            strncpy(userText[i], similar, MAXSTRING);
+            // printf("SIMILAR: %s\n", similar);
+            strcpy(userText[i], similar);
+            // for (int i = 0; i < numberOfWords; i++) {
+            //     printf("%s ", userText[i]);
+            // }
+            // printf("\n");
+            break;
         }
     }
 }

@@ -40,7 +40,7 @@ int main(int argc, char argv[]){
 
     char finalMessage[] = "";
     for (int i = 0; i < numberOfWords; i++) {
-        if (userText[i][0] > 65) strcat(finalMessage, " ");
+        if (userText[i][0] >= 65) strcat(finalMessage, " ");
         strcat(finalMessage, userText[i]);
     }
 
