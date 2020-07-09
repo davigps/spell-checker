@@ -139,21 +139,31 @@ char **getWordsFromLine(char line[], int *numberOfWords)
     int j;
     for (j = 0; j < linelen; j++)
     {
-        // Se o char é espaço, adiciona esse caractere à palavra atual
-        if (line[j] == ' ')
+        // Se o char é espaço ou especial, adiciona esse caractere à palavra atual
+        if ((line[j] == ' ' || line[j] < 65) && strlen(word))
         {
             // adiciona a palavra completa ao array
             words[i++] = strdup(word);
-            // Aumenta a quantidade de palavras
+            // Aumenta a quantidade de palavras, davi
             (*numberOfWords)++;
             // Reseta a string
             memset(word, 0, wordlen);
             currentChar = 0;
+
+            if (line[j] > 32 && line[j] < 65) {
+                char special[1];
+                special[0] = line[j];
+
+                words[i++] = special;
+                printf("AAAAAAAAAA %s %d\n", words[i - 1], (int) line[j]);
+                // Aumenta a quantidade de palavras
+                (*numberOfWords)++;
+            }
         }
         else
         {
             // Adiciona mais um caractere
-            word[currentChar++] = line[j];
+            if (line[j] != ' ') word[currentChar++] = line[j];
         }
     }
 
@@ -166,19 +176,6 @@ char **getWordsFromLine(char line[], int *numberOfWords)
     }
 
     return words;
-}
-
-// Função para liberar espaço dos arrays alocados dinâmicamente
-void freeArray(char **words, int rows)
-{
-    int i;
-    // Percorre cada item do array (que também é um array [string])
-    for (i = 0; i < rows; i++)
-    {
-        free(words[i]);
-    }
-    // Libera o array final
-    free(words);
 }
 
 char **check_words(char **userText, int numberOfWords, char **dictionary)
@@ -197,6 +194,7 @@ char **check_words(char **userText, int numberOfWords, char **dictionary)
     int i;
     for (i = 0; i < numberOfWords; i++)
     {
+        if (userText[i][0] < 65) continue;
         int result = find_word(userText[i], dictionary);
 
         if (result == 1)
@@ -257,6 +255,7 @@ int find_word(char *word, char **dictionary)
     int i;
     for (i = 0; i < DICTIONARY_LEN; i++)
     {
+        word[0] = tolower(word[0]);
         if (strcmp(word, dictionary[i]) == 0)
         {
             return 1;
@@ -266,13 +265,14 @@ int find_word(char *word, char **dictionary)
     return 0;
 }
 
-int getSimilar(char word[], char **dictionary) {
+void getSimilar(char word[], char **dictionary, char *similar) {
     char first[MAXSTRING];
     int firstDistance = MAX_DISTANCE;
     char second[MAXSTRING];
     int secondDistance = MAX_DISTANCE;
     char third[MAXSTRING];
     int thirdDistance = MAX_DISTANCE;
+
 
     for (int i = 0; i < DICTIONARY_LEN; i++) {
         int distance = levenshtein(dictionary[i], word);
@@ -289,10 +289,33 @@ int getSimilar(char word[], char **dictionary) {
         }
     }
 
-    printf("%s\n", first);
-    printf("%s\n", second);
-    printf("%s\n", third);
+    printf("  1 - %s\n", first);
+    printf("  2 - %s\n", second);
+    printf("  3 - %s\n", third);
+    int option;
+    printf("\nDigite o número da palavra a ser usada ou 0 para permanecer com a palavra %s.\n", word);
+    printf("> ");
+    scanf("%d", &option);
 
-    return 1;
+    if (option == 1) strncpy(similar, first, MAXSTRING);
+    else if (option == 2) strncpy(similar, second, MAXSTRING);
+    else if (option == 3) strncpy(similar, third, MAXSTRING);
+    else if (option == 0) similar = NULL;
+    else {
+        printf("Opção desconhecida, nenhuma alteração será feita.\n");
+    }
+
+    int isAlreadyUpper = isupper(word[0]);
+    if (similar != NULL && isAlreadyUpper) similar[0] = toupper(similar[0]);
 }
 
+void changeWord(char wrongWord[], char similar[], char **userText, int numberOfWords) {
+    for (int i = 0; i < numberOfWords; i++) {
+        printf("CONDICAO: %s %s\n", userText[i], similar);
+
+        if (strcmp(userText[i], wrongWord) == 0) {
+            printf("SIMILAR: %s\n", similar);
+            strncpy(userText[i], similar, MAXSTRING);
+        }
+    }
+}

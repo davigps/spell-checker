@@ -15,8 +15,6 @@ char **getTextFromFile(char[], int*);
 
 char **getWordsFromLine(char[], int*);
 
-void freeArray (char **, int);
-
 char **check_words(char **, int, char **);
 
 int find_word(char [], char**);
@@ -25,4 +23,6 @@ int binarySearch(char**, int, int, char *);
 
 int compare_words(char[], char[]);
 
-int getSimilar(char[], char**);
+void getSimilar(char[], char**, char*);
+
+void changeWord(char[], char[], char**, int);

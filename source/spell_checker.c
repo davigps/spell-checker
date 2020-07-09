@@ -28,15 +28,23 @@ int main(int argc, char argv[]){
 
     int i = -1;
     while (wrongWords[++i]) {
-        // printf("A palavra Numca pode estar escrita incorretamente, as opções de substituição são:\n");
-        printf("Errada: %s\n", wrongWords[i]);
-        int selectedWord = getSimilar(wrongWords[i], dictionary);
+        printf("A palavra %s pode estar escrita incorretamente, as opções de substituição são:\n", wrongWords[i]);
+        char similar[] = "";
+        getSimilar(wrongWords[i], dictionary, similar);
 
-        printf("indice: %d\n", selectedWord);
+        printf("SIMILAR %s\n", similar);
+        if (similar != NULL) {
+            changeWord(wrongWords[i], similar, userText, numberOfWords);
+        }
     }
 
-    freeArray(dictionary, DICTIONARY_LEN);
-    freeArray(userText, numberOfWords);
+    char finalMessage[] = "";
+    for (int i = 0; i < numberOfWords; i++) {
+        if (userText[i][0] > 65) strcat(finalMessage, " ");
+        strcat(finalMessage, userText[i]);
+    }
+
+    printf("%s\n", finalMessage);
 
     return 0;
 }
