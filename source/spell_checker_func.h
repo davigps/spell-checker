@@ -1,4 +1,5 @@
 #include "spell_checker.h"
+#include "levenshtein.h"
 
 // Função para obter o dicionário em array
 char **getDictionary(char filename[])
@@ -264,3 +265,34 @@ int find_word(char *word, char **dictionary)
 
     return 0;
 }
+
+int getSimilar(char word[], char **dictionary) {
+    char first[MAXSTRING];
+    int firstDistance = MAX_DISTANCE;
+    char second[MAXSTRING];
+    int secondDistance = MAX_DISTANCE;
+    char third[MAXSTRING];
+    int thirdDistance = MAX_DISTANCE;
+
+    for (int i = 0; i < DICTIONARY_LEN; i++) {
+        int distance = levenshtein(dictionary[i], word);
+
+        if (distance < firstDistance) {
+            strncpy(first, dictionary[i], 47);
+            firstDistance = distance;
+        } else if (distance < secondDistance) {
+            strncpy(second, dictionary[i], 47);
+            secondDistance = distance;
+        } else if (distance < thirdDistance) {
+            strncpy(third, dictionary[i], 47);
+            thirdDistance = distance;
+        }
+    }
+
+    printf("%s\n", first);
+    printf("%s\n", second);
+    printf("%s\n", third);
+
+    return 1;
+}
+

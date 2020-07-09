@@ -6,6 +6,8 @@
 #define NWORDS_TEXT 141
 #define DICTIONARY_LEN 320139
 #define MAX_INPUT 281
+#define MAX_DISTANCE 100
+#define MAXSTRING 47
 
 char **getDictionary(char[]);
 
@@ -23,4 +25,4 @@ int binarySearch(char**, int, int, char *);
 
 int compare_words(char[], char[]);
 
-int cmpstr(char *a, char *b);
+int getSimilar(char[], char**);

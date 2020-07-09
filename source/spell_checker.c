@@ -1,5 +1,6 @@
 #include "spell_checker_func.h"
 
+
 int main(int argc, char argv[]){
     char **dictionary = getDictionary("palavras.txt");
     char **userText = NULL;
@@ -29,6 +30,9 @@ int main(int argc, char argv[]){
     while (wrongWords[++i]) {
         // printf("A palavra Numca pode estar escrita incorretamente, as opções de substituição são:\n");
         printf("Errada: %s\n", wrongWords[i]);
+        int selectedWord = getSimilar(wrongWords[i], dictionary);
+
+        printf("indice: %d\n", selectedWord);
     }
 
     freeArray(dictionary, DICTIONARY_LEN);
