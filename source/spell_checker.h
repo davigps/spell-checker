@@ -15,11 +15,9 @@ char **getTextFromFile(char[], int*);
 
 char **getWordsFromLine(char[], int*);
 
-char **check_words(char **, int, char **);
+void check_words(char **, int, char **, char[]);
 
 int find_word(char [], char**);
-
-int binarySearch(char**, int, int, char *);
 
 int compare_words(char[], char[]);
 

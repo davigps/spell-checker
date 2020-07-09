@@ -24,7 +24,23 @@ int main(int argc, char argv[]){
         userText = getTextFromFile(input, &numberOfWords);
     }
 
-    char **wrongWords = check_words(userText, numberOfWords, dictionary);
+    for (int i = 0; i < numberOfWords; i++) {
+        printf("- %s\n", userText[i]);
+    }
+
+    char **wrongWords;
+
+    if (!(wrongWords = (char **) calloc(NWORDS_TEXT, sizeof(char[MAXSTRING]))))
+    {
+        printf("Memória Virtual exaurida!\n");
+        return NULL;
+    }
+
+    check_words(userText, numberOfWords, dictionary, wrongWords);
+
+    for (int i = 0; i < numberOfWords; i++) {
+        printf("+ %s\n", userText[i]);
+    }
 
     int i = -1;
     while (wrongWords[++i]) {
