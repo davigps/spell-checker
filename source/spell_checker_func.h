@@ -108,14 +108,12 @@ char **getTextFromFile(char filename[], int *numberOfWords)
 }
 
 // Função para obter um array de palavras de uma linha
-char **getWordsFromLine(char line[], int *numberOfWords)
-{
+char **getWordsFromLine(char line[], int *numberOfWords) {
     // Inicializa o array de palavras
     char **words = NULL;
 
     // Aloca o tamanho máximo do array de palavras
-    if (!(words = (char **) calloc(NWORDS_TEXT, sizeof *words)))
-    {
+    if (!(words = (char **) calloc(NWORDS_TEXT, sizeof(char[MAXSTRING])))) {
         printf("Memória Virtual exaurida!\n");
         return NULL;
     }
@@ -124,8 +122,7 @@ char **getWordsFromLine(char line[], int *numberOfWords)
     size_t linelen = strlen(line);
 
     // Retira o \n ao final da linha
-    if (line[linelen - 1] == '\n')
-    {
+    if (line[linelen - 1] == '\n') {
         line[linelen - 1] = 0;
     }
 
@@ -133,14 +130,13 @@ char **getWordsFromLine(char line[], int *numberOfWords)
     int i = 0;
     char word[MAXSTRING];
     int currentChar = 0;
-    int iSpecials = 0;
 
     // Percorre cada char da linha
-    int j;
-    for (j = 0; j < linelen; j++)
+    for (int j = 0; j < linelen; j++)
     {
+        // oi eu sou goku!
         // Se o char é espaço ou especial, adiciona esse caractere à palavra atual
-        if ((line[j] == ' ' || line[j] < 65) && strlen(word))
+        if ((line[j] == ' ' || (line[j] > 32 && line[j] < 65)) && strlen(word))
         {
             // adiciona a palavra completa ao array
             words[i++] = strdup(word);
@@ -173,8 +169,7 @@ char **getWordsFromLine(char line[], int *numberOfWords)
     }
 
     // Caso sobre uma palavra não adicionada
-    if (strlen(word) > 0)
-    {
+    if (strlen(word) > 0) {
         words[i++] = strdup(word);
         (*numberOfWords)++;
         memset(word, 0, MAXSTRING);
@@ -207,6 +202,8 @@ char **check_words(char **userText, int numberOfWords, char **dictionary)
     for (i = 0; i < numberOfWords; i++)
     {
         if (!(userText[i][0] > 32 && userText[i][0] < 65)) {
+            if (userText[i][0] == '\0') continue;
+
             int result = find_word(userText[i], dictionary);
 
             if (result)
