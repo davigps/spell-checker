@@ -28,15 +28,7 @@ int main(int argc, char argv[]){
         printf("- %s\n", userText[i]);
     }
 
-    char **wrongWords;
-
-    if (!(wrongWords = (char **) calloc(NWORDS_TEXT, sizeof(char[MAXSTRING]))))
-    {
-        printf("Memória Virtual exaurida!\n");
-        return NULL;
-    }
-
-    check_words(userText, numberOfWords, dictionary, wrongWords);
+    char **wrongWords = check_words(userText, numberOfWords, dictionary);
 
     for (int i = 0; i < numberOfWords; i++) {
         printf("+ %s\n", userText[i]);

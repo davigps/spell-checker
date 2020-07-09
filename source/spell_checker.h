@@ -15,7 +15,7 @@ char **getTextFromFile(char[], int*);
 
 char **getWordsFromLine(char[], int*);
 
-void check_words(char **, int, char **, char[]);
+char **check_words(char **, int, char **);
 
 int find_word(char [], char**);
 

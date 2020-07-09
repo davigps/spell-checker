@@ -133,6 +133,7 @@ char **getWordsFromLine(char line[], int *numberOfWords)
     int i = 0;
     char word[MAXSTRING];
     int currentChar = 0;
+    int iSpecials = 0;
 
     // Percorre cada char da linha
     int j;
@@ -150,10 +151,14 @@ char **getWordsFromLine(char line[], int *numberOfWords)
             currentChar = 0;
 
             if (line[j] > 32 && line[j] < 65) {
-                char special[1];
+                char special[2];
                 special[0] = line[j];
+                special[1] = '\0';
 
                 words[i++] = special;
+                // specials[iSpecials].word[0] = line[j];
+                // specials[iSpecials].position = numberOfWords;
+                // iSpecials++;
                 (*numberOfWords)++;
 
                 printf("AAAAAAAAAA %s %d\n", words[i - 1], (int) line[j]);
@@ -178,28 +183,24 @@ char **getWordsFromLine(char line[], int *numberOfWords)
     return words;
 }
 
-void check_words(char **userText, int numberOfWords, char **dictionary, char words[])
+char **check_words(char **userText, int numberOfWords, char **dictionary)
 {
     for (int i = 0; i < numberOfWords; i++) {
         printf("x %s\n", userText[i]);
     }
     // Inicializa o array de palavras
-    // char **words = NULL;
-
-    // for (int i = 0; i < numberOfWords; i++) {
-    //     printf("y %s\n", userText[i]);
-    // }
+    char **words = NULL;
 
     // Aloca o tamanho máximo do array de palavras
-    // if (!(words = (char **) calloc(NWORDS_TEXT, sizeof *words)))
-    // {
-    //     printf("Memória Virtual exaurida!\n");
-    //     return NULL;
-    // }
+    if (!(words = calloc(NWORDS_TEXT, sizeof(char[MAXSTRING]))))
+    {
+        printf("Memória Virtual exaurida!\n");
+        return NULL;
+    }
 
-    // for (int i = 0; i < numberOfWords; i++) {
-    //     printf("z %s\n", userText[i]);
-    // }
+    for (int i = 0; i < numberOfWords; i++) {
+        printf("z %d\n", (int) userText[i][0]);
+    }
 
     int currentWord = 0;
     int i;
@@ -213,16 +214,12 @@ void check_words(char **userText, int numberOfWords, char **dictionary, char wor
                 printf("Encontrado: <%s> \n", userText[i]);
             } else {
                 printf("chegou %s\n", userText[i]);
-                strcpy(words[currentWord++], userText[i]);
-                // words[currentWord++] = userText[i];
+                words[currentWord++] = userText[i];
             }
         }
-        
-
-        // int iResult = binarySearch(dictionary, 0, DICTIONARY_LEN - 1, userText[i]);
     }
 
-    // return words;
+    return words;
 }
 
 int find_word(char *word, char **dictionary)
