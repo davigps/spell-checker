@@ -1,4 +1,6 @@
-#include "spell_checker_func.h"
+#include "spell_checker_bas.h"
+#include "spell_checker_fin.h"
+#include "spell_checker_lev.h"
 
 
 int main(int argc, char argv[]){
