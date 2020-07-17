@@ -74,7 +74,7 @@ void getSimilar(char word[], char **dictionary, char *similar) {
     if (option == 1) strcpy(similar, first);
     else if (option == 2) strcpy(similar, second);
     else if (option == 3) strcpy(similar, third);
-    else if (option == 0) similar = NULL;
+    else if (option == 0) strcpy(similar, word);
     else {
         printf("Opção desconhecida, nenhuma alteração será feita.\n");
     }
