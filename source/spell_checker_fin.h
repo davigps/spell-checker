@@ -5,7 +5,6 @@ char **check_words(char **userText, int numberOfWords, char **dictionary)
     char userTextCopy[NWORDS_TEXT][MAXSTRING];
 
     for (int i = 0; i < numberOfWords; i++) {
-        // printf("x %s\n", userText[i]);
         strcpy(userTextCopy[i], userText[i]);
     }
     // Inicializa o array de palavras
@@ -19,7 +18,6 @@ char **check_words(char **userText, int numberOfWords, char **dictionary)
     }
 
     for (int i = 0; i < numberOfWords; i++) {
-        // printf("z %d\n", (int) userText[i][0]);
         if (((int) userText[i][0]) == 0) {
             strcpy(userText[i], userTextCopy[i]);
         }
@@ -36,9 +34,7 @@ char **check_words(char **userText, int numberOfWords, char **dictionary)
 
             if (result)
             {
-                printf("Encontrado: <%s> \n", userText[i]);
             } else {
-                printf("chegou %s\n", userText[i]);
                 words[currentWord++] = userText[i];
             }
         }

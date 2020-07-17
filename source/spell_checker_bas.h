@@ -133,7 +133,6 @@ char **getWordsFromLine(char line[], int *numberOfWords) {
     // Percorre cada char da linha
     for (int j = 0; j < linelen; j++)
     {
-        // oi eu sou goku!
         // Se o char é espaço ou especial, adiciona esse caractere à palavra atual
         if ((line[j] == ' ' || (line[j] > 32 && line[j] < 65)) && strlen(word))
         {
@@ -151,13 +150,9 @@ char **getWordsFromLine(char line[], int *numberOfWords) {
                 special[1] = '\0';
 
                 words[i++] = special;
-                // specials[iSpecials].word[0] = line[j];
-                // specials[iSpecials].position = numberOfWords;
-                // iSpecials++;
-                (*numberOfWords)++;
 
-                printf("AAAAAAAAAA %s %d\n", words[i - 1], (int) line[j]);
                 // Aumenta a quantidade de palavras
+                (*numberOfWords)++;
             }
         }
         else

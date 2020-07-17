@@ -26,15 +26,7 @@ int main(int argc, char argv[]){
         userText = getTextFromFile(input, &numberOfWords);
     }
 
-    for (int i = 0; i < numberOfWords; i++) {
-        printf("- %s\n", userText[i]);
-    }
-
     char **wrongWords = check_words(userText, numberOfWords, dictionary);
-
-    for (int i = 0; i < numberOfWords; i++) {
-        printf("+ %s\n", userText[i]);
-    }
 
     int i = -1;
     while (wrongWords[++i]) {
@@ -42,7 +34,6 @@ int main(int argc, char argv[]){
         char similar[] = "";
         getSimilar(wrongWords[i], dictionary, similar);
 
-        printf("SIMILAR %s\n", similar);
         if (similar != NULL) {
             changeWord(wrongWords[i], similar, userText, numberOfWords);
         }
@@ -54,6 +45,7 @@ int main(int argc, char argv[]){
         strcat(finalMessage, userText[i]);
     }
 
+    printf("\nResultado:\n");
     printf("%s\n", finalMessage);
 
     return 0;

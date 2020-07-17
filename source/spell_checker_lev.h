@@ -84,15 +84,8 @@ void getSimilar(char word[], char **dictionary, char *similar) {
 
 void changeWord(char wrongWord[], char similar[], char **userText, int numberOfWords) {
     for (int i = 0; i < numberOfWords; i++) {
-        // printf("CONDICAO: %s %s\n", userText[i], similar);
-
         if (strcmp(userText[i], wrongWord) == 0) {
-            // printf("SIMILAR: %s\n", similar);
             strcpy(userText[i], similar);
-            // for (int i = 0; i < numberOfWords; i++) {
-            //     printf("%s ", userText[i]);
-            // }
-            // printf("\n");
             break;
         }
     }
