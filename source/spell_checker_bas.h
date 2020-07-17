@@ -1,14 +1,12 @@
 #include "spell_checker.h"
 
 // Função para obter o dicionário em array
-char **getDictionary(char filename[])
-{
+char **getDictionary(char filename[]) {
     FILE *file;
     file = fopen(filename, "r");
 
     // Caso o arquivo não exista
-    if (!file) 
-    {
+    if (!file) {
         printf("ERRO! O arquivo %s não foi aberto!\n", filename);
         return NULL;
     }
@@ -18,16 +16,14 @@ char **getDictionary(char filename[])
     char **dictionary = NULL;
 
     // Aloca todas as posições que o array vai precisar ter
-    if (!(dictionary = (char **) calloc(DICTIONARY_LEN, sizeof *dictionary)))
-    {
+    if (!(dictionary = (char **) calloc(DICTIONARY_LEN, sizeof *dictionary))) {
         printf("Memória Virtual exaurida!\n");
         return NULL;
     }
 
     int i = 0;
     // Percorre até encontrar o final do arquivo
-    while (!feof(file))
-    {
+    while (!feof(file)) {
         // Obtém a linha
         result = fgets(line, 47, file);
 
@@ -35,8 +31,7 @@ char **getDictionary(char filename[])
         size_t wordlen = strlen(result);
 
         // Retira o caractere \n ao final da palavra
-        if (result[wordlen - 1] == '\n')
-        {
+        if (result[wordlen - 1] == '\n') {
             result[wordlen - 1] = 0;
         }
 
@@ -51,14 +46,12 @@ char **getDictionary(char filename[])
 }
 
 // Função para Obter as palavras de um arquivo
-char **getTextFromFile(char filename[], int *numberOfWords)
-{
+char **getTextFromFile(char filename[], int *numberOfWords) {
     FILE *file;
     file = fopen(filename, "r");
 
     // Arquivo não encontrado.
-    if (file == NULL)
-    {
+    if (file == NULL) {
         printf("ERRO! O arquivo %s não foi aberto!\n", filename);
         return NULL;
     }
@@ -69,8 +62,7 @@ char **getTextFromFile(char filename[], int *numberOfWords)
     char **text = NULL;
 
     // Aloca o tamanho máximo que o array de palavras terá
-    if (!(text = (char **) calloc(NWORDS_TEXT, sizeof *text)))
-    {
+    if (!(text = (char **) calloc(NWORDS_TEXT, sizeof *text))) {
         printf("Memória Virtual exaurida!\n");
         return NULL;
     }
@@ -81,8 +73,7 @@ char **getTextFromFile(char filename[], int *numberOfWords)
     int i = 0;
 
     // Enquanto o arquivo não acabar
-    while (!feof(file))
-    {
+    while (!feof(file)) {
         // Obtém a linha atual
         result = fgets(line, 282, file);
 
@@ -95,8 +86,7 @@ char **getTextFromFile(char filename[], int *numberOfWords)
 
         // Percorre todas as palavras da linha adicionando ao array de palavras final
         int j;
-        for (j = 0; j < nWordsOfLine; j++)
-        {
+        for (j = 0; j < nWordsOfLine; j++) {
             text[i++] = words[j];
         }
     }
@@ -131,11 +121,9 @@ char **getWordsFromLine(char line[], int *numberOfWords) {
     int currentChar = 0;
 
     // Percorre cada char da linha
-    for (int j = 0; j < linelen; j++)
-    {
+    for (int j = 0; j < linelen; j++) {
         // Se o char é espaço ou especial, adiciona esse caractere à palavra atual
-        if ((line[j] == ' ' || (line[j] > 32 && line[j] < 65)) && strlen(word))
-        {
+        if ((line[j] == ' ' || (line[j] > 32 && line[j] < 65)) && strlen(word)) {
             // adiciona a palavra completa ao array
             words[i++] = strdup(word);
             // Aumenta a quantidade de palavras, davi
@@ -155,8 +143,7 @@ char **getWordsFromLine(char line[], int *numberOfWords) {
                 (*numberOfWords)++;
             }
         }
-        else
-        {
+        else {
             // Adiciona mais um caractere
             if (line[j] != ' ') word[currentChar++] = line[j];
         }

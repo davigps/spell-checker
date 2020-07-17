@@ -3,7 +3,7 @@
 #include "spell_checker_lev.h"
 
 
-int main(int argc, char argv[]){
+int main(int argc, char argv[]) {
     char **dictionary = getDictionary("palavras.txt");
     char **userText = NULL;
     int numberOfWords = 0;

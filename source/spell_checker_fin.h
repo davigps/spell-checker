@@ -1,7 +1,6 @@
 #include "spell_checker.h"
 
-char **check_words(char **userText, int numberOfWords, char **dictionary)
-{
+char **check_words(char **userText, int numberOfWords, char **dictionary) {
     char userTextCopy[NWORDS_TEXT][MAXSTRING];
 
     for (int i = 0; i < numberOfWords; i++) {
@@ -11,8 +10,7 @@ char **check_words(char **userText, int numberOfWords, char **dictionary)
     char **words = NULL;
 
     // Aloca o tamanho máximo do array de palavras
-    if (!(words = calloc(NWORDS_TEXT, sizeof(char[MAXSTRING]))))
-    {
+    if (!(words = calloc(NWORDS_TEXT, sizeof(char[MAXSTRING])))) {
         printf("Memória Virtual exaurida!\n");
         return NULL;
     }
@@ -25,16 +23,13 @@ char **check_words(char **userText, int numberOfWords, char **dictionary)
 
     int currentWord = 0;
     int i;
-    for (i = 0; i < numberOfWords; i++)
-    {
+    for (i = 0; i < numberOfWords; i++) {
         if (!(userText[i][0] > 32 && userText[i][0] < 65)) {
             if (userText[i][0] == '\0') continue;
 
             int result = find_word(userText[i], dictionary);
 
-            if (result)
-            {
-            } else {
+            if (!result) {
                 words[currentWord++] = userText[i];
             }
         }
